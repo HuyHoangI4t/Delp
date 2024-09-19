@@ -35,6 +35,7 @@ type
     SubmitF: TButton;
     procedure UinEChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure SubmitFClick(Sender: TObject);
 //    procedure TopPanelClick(Sender: TObject);
   private
     { Private declarations }
@@ -90,7 +91,7 @@ begin
   lval:=STR2MGT(left)*U;
   rval:=STR2MGT(right)*U;
 
-  if (lval=nil) or (rval=nil) then
+  if (lval=[]) or (rval=[]) then
     exit();
 
 end;
@@ -103,6 +104,11 @@ end;
 procedure TCSDL.FormShow(Sender: TObject);
 begin
   mFRelations.Lines.Clear;
+end;
+
+procedure TCSDL.SubmitFClick(Sender: TObject);
+begin
+  addRelation(Xinput.Text, Yinput.Text);
 end;
 
 procedure TCSDL.UinEChange(Sender: TObject);

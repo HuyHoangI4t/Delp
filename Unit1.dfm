@@ -75,13 +75,12 @@ object CSDL: TCSDL
           Width = 196
           Height = 60
           Align = alClient
-          EditMask = '>LLLLLLLLLLLLLLLLL;1;_'
+          EditMask = '>lllllllllllllllll;1;_'
           MaxLength = 17
           TabOrder = 0
           Text = '                 '
           OnChange = UinEChange
           ExplicitLeft = 80
-          ExplicitTop = 2
         end
       end
       object UoutP: TPanel
@@ -198,12 +197,13 @@ object CSDL: TCSDL
               Width = 196
               Height = 46
               Align = alClient
-              EditMask = '>LLLLLLLLLLLLLLLLL;1;_'
+              EditMask = '>lllllllllllllllll;1;_'
               MaxLength = 17
               TabOrder = 0
               Text = '                 '
               OnChange = UinEChange
-              ExplicitHeight = 27
+              ExplicitLeft = 76
+              ExplicitTop = -4
             end
           end
           object AddFX: TPanel
@@ -231,12 +231,13 @@ object CSDL: TCSDL
               Width = 196
               Height = 46
               Align = alClient
-              EditMask = '>LLLLLLLLLLLLLLLLL;1;_'
+              EditMask = '>lllllllllllllllll;1;_'
               MaxLength = 17
               TabOrder = 0
               Text = '                 '
               OnChange = UinEChange
-              ExplicitHeight = 27
+              ExplicitLeft = 76
+              ExplicitTop = -3
             end
           end
           object SubmitF: TButton
@@ -247,6 +248,9 @@ object CSDL: TCSDL
             Align = alTop
             Caption = 'Nh'#7853'p F'
             TabOrder = 2
+            OnClick = SubmitFClick
+            ExplicitLeft = -1
+            ExplicitTop = 102
           end
         end
         object XPlusPanel: TPanel

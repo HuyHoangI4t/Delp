@@ -1,0 +1,117 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls,
+  Vcl.Mask;
+
+type
+  TCSDL = class(TForm)
+    Splitter1: TSplitter;
+    TopPanel: TPanel;
+    mFRelations: TMemo;
+    UinOut: TPanel;
+    Splitter2: TSplitter;
+    BottomPanel: TPanel;
+    PageControl1: TPageControl;
+    Home: TTabSheet;
+    UinP: TPanel;
+    UoutP: TPanel;
+    Uin: TLabel;
+    Uout: TLabel;
+    UinE: TMaskEdit;
+    UoutE: TMaskEdit;
+    AddF: TPanel;
+    Splitter3: TSplitter;
+    AddFY: TPanel;
+    AddFX: TPanel;
+    Xlabel: TLabel;
+    Ylabel: TLabel;
+    XPlusPanel: TPanel;
+    Xinput: TMaskEdit;
+    Yinput: TMaskEdit;
+    SubmitF: TButton;
+    procedure UinEChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+//    procedure TopPanelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+type
+  MGT=set of char;
+  PTR=^Node;
+  Node = Record
+    VT:MGT;
+    VP:MGT;
+    Next:Ptr;
+  End;
+var
+  CSDL: TCSDL;
+  F:Ptr;
+  U:MGT;
+
+implementation
+
+{$R *.dfm}
+
+function STR2MGT(S:string):MGT;
+var
+  Mu:MGT;
+  i:integer;
+begin
+  Mu:=[];
+  for I := 1 to length(S) do
+    if S[I]<>' ' then
+      Include(U,ansichar(S[I]));
+
+  result:=U;
+end;
+
+function MGT2STR(Mu:MGT):string;
+var
+  S:string;
+  i:char;
+begin
+  S:='';
+  for i in Mu do
+    S:=S+i;
+  result:=S;
+end;
+
+procedure addRelation(left:string; right:string);
+var
+  lval:MGT;
+  rval:MGT;
+begin
+  lval:=STR2MGT(left)*U;
+  rval:=STR2MGT(right)*U;
+
+  if (lval=nil) or (rval=nil) then
+    exit();
+
+end;
+
+function deduplicate(S:string):string;
+begin
+  result:=MGT2STR(STR2MGT(s));
+end;
+
+procedure TCSDL.FormShow(Sender: TObject);
+begin
+  mFRelations.Lines.Clear;
+end;
+
+procedure TCSDL.UinEChange(Sender: TObject);
+var t:char;
+begin
+  UoutE.Text := deduplicate(UinE.Text);
+  U:=STR2MGT(UinE.Text);
+//  if F=nil then
+//    mFRelations.Lines.Add('fuck?');
+end;
+
+end.
