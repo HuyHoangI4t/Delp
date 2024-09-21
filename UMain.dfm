@@ -1,7 +1,7 @@
 object CSDL: TCSDL
   Left = 390
   Top = 110
-  Caption = 'CSDL'
+  Caption = 'CSDL23103083_Nguyen_Dinh_Trung'
   ClientHeight = 490
   ClientWidth = 815
   Color = clWhite
@@ -141,17 +141,13 @@ object CSDL: TCSDL
       Top = 1
       Width = 813
       Height = 356
-      ActivePage = Key
+      ActivePage = Find_F
       Align = alClient
       MultiLine = True
       TabOrder = 0
       TabWidth = 75
       object Home: TTabSheet
         Caption = 'Home'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Splitter3: TSplitter
           Left = 276
           Top = 0
@@ -273,10 +269,11 @@ object CSDL: TCSDL
               Left = 1
               Top = 1
               Width = 69
-              Height = 19
+              Height = 39
               Align = alLeft
               Caption = 'T'#205'NH X+:'
               Layout = tlCenter
+              ExplicitHeight = 19
             end
             object XplusE: TMaskEdit
               Left = 87
@@ -420,6 +417,94 @@ object CSDL: TCSDL
             TabStop = False
             ReadOnly = True
             TabOrder = 1
+          end
+        end
+      end
+      object Find_F: TTabSheet
+        Caption = 'Find_F'
+        ImageIndex = 2
+        object Panel1: TPanel
+          Left = 0
+          Top = 82
+          Width = 805
+          Height = 41
+          Align = alTop
+          TabOrder = 0
+          object CalcF3But: TButton
+            Left = 1
+            Top = 1
+            Width = 75
+            Height = 39
+            Align = alLeft
+            Caption = 'T'#205'NH F3'
+            TabOrder = 0
+            OnClick = CalcF3ButClick
+          end
+          object F3Out: TEdit
+            Left = 76
+            Top = 1
+            Width = 728
+            Height = 39
+            Align = alClient
+            ReadOnly = True
+            TabOrder = 1
+            ExplicitHeight = 27
+          end
+        end
+        object Panel2: TPanel
+          Left = 0
+          Top = 0
+          Width = 805
+          Height = 41
+          Align = alTop
+          TabOrder = 1
+          object CalcF1But: TButton
+            Left = 1
+            Top = 1
+            Width = 75
+            Height = 39
+            Align = alLeft
+            Caption = 'T'#205'NH F1'
+            TabOrder = 0
+            OnClick = CalcF1ButClick
+          end
+          object F1Out: TEdit
+            Left = 76
+            Top = 1
+            Width = 728
+            Height = 39
+            Align = alClient
+            ReadOnly = True
+            TabOrder = 1
+            ExplicitHeight = 27
+          end
+        end
+        object Panel3: TPanel
+          Left = 0
+          Top = 41
+          Width = 805
+          Height = 41
+          Align = alTop
+          TabOrder = 2
+          object CalcF2But: TButton
+            Left = 1
+            Top = 1
+            Width = 75
+            Height = 39
+            Align = alLeft
+            Caption = 'T'#205'NH F2'
+            TabOrder = 0
+            OnClick = CalcF2ButClick
+          end
+          object F2Out: TEdit
+            Left = 76
+            Top = 1
+            Width = 728
+            Height = 39
+            Align = alClient
+            ReadOnly = True
+            TabOrder = 1
+            ExplicitHeight = 27
           end
         end
       end

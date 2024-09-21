@@ -52,6 +52,16 @@ type
     Label3: TLabel;
     CalcK2But: TButton;
     K2Output: TEdit;
+    Find_F: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    CalcF1But: TButton;
+    CalcF2But: TButton;
+    CalcF3But: TButton;
+    F1Out: TEdit;
+    F2Out: TEdit;
+    F3Out: TEdit;
     procedure UinEChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SubmitFClick(Sender: TObject);
@@ -60,6 +70,9 @@ type
     procedure ImportFromFileClick(Sender: TObject);
     procedure CalcKSClick(Sender: TObject);
     procedure CalcK2ButClick(Sender: TObject);
+    procedure CalcF1ButClick(Sender: TObject);
+    procedure CalcF2ButClick(Sender: TObject);
+    procedure CalcF3ButClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -77,7 +90,9 @@ type
 var
   CSDL: TCSDL;
   F:Ptr;
-  tail:Ptr;
+  F1:Ptr;
+  F2:Ptr;
+  F3:Ptr;
   U:MGT;
 
 implementation
@@ -108,23 +123,28 @@ begin
   result:=S;
 end;
 
-function getRelation(F:PTR):String;
+function getRelation(F:PTR; rev:Boolean=false; relName:String='F'):String;
 var
   o:String;
+  buffer:String;
   temp:PTR;
 begin
   temp:=F;
-  o:='F={';
   while (temp<>nil) do
     begin
-      o:=o+MGT2STR(temp.VT)+'→'+MGT2STR(temp.VP)+'; ';
+      buffer:=MGT2STR(temp.VT)+'→'+MGT2STR(temp.VP)+';  ';
+      if rev then
+        o:=o+buffer
+      else
+        o:=buffer+o;
       temp:=temp.Next;
     end;
 
-    o:=o+'}';
+    o:=relName+'={ '+o;
+    o:=o+' }';
     result:=o;
 end;
-procedure appendNode(left:MGT; right:MGT);
+procedure appendNode(left:MGT; right:MGT; var l:PTR);
 var
   tp:Ptr;
 begin
@@ -134,29 +154,28 @@ begin
   tp.Next := nil;
   tp.Active := true;
 
-  if F=nil then
+  if l=nil then
     begin
-      F:=tp;
-      tail:=tp;
+      l:=tp;
     end
   else
     begin
-      tail.Next:=tp;
-      tail := tail.Next;
+      tp.Next:=l;
+      l:=tp;
     end;
 end;
 
-procedure clearList();
+procedure clearList(var l:ptr);
 var
 tp:Ptr;
 begin
-  tp:=f;
+  tp:=l;
 
-  while f<>nil do
+  while l<>nil do
   begin
-    f:=f.Next;
+    l:=l.Next;
     FreeMemory(tp);
-    tp:=f;
+    tp:=l;
   end;
 end;
 
@@ -170,7 +189,7 @@ begin
 
   if (lval=[]) or (rval=[]) then
     exit();   //Early return
-  appendNode(lval, rval);
+  appendNode(lval, rval, f);
 end;
 
 function deduplicate(S:string):string;
@@ -178,31 +197,33 @@ begin
   result:=MGT2STR(STR2MGT(s));
 end;
 
-function calcXplus(x:MGT):MGT;
+function calcXplus(x:MGT; l:PTR=nil):MGT;   //X+
 var
 KQ:MGT;
+KQ2:MGT;
 tp:PTR;
-changed:Boolean;
+
 begin
-  KQ := x*u;
-  changed := true;
-  while (changed) and (KQ<>U) do
+  if l = nil then //Making default Value (this is suck af)
+    l:=F;
+  x := x*u;
+  KQ := x;
+  KQ2 := [];
+  while KQ<>KQ2 do
     begin
-      tp := F;
-      changed := false;
+      tp := l;
+
+      KQ2:=KQ;
       while (tp<>nil) and (KQ<>U) do
         begin
-          if tp.VP <= KQ then
-            begin
-              //Just do nothing
-            end
-          else if (tp.VT<=KQ) then
-            begin
-              KQ := KQ+tp.VP;
-              changed := true;
-            end;
+          if not tp.Active then
+          begin
+             //Oh yea another fucking dummy code :/
+          end
+          else if tp.VT<=KQ then
+            KQ:=KQ+tp.VP;
 
-          tp := tp.Next;
+          tp:=tp.Next;
         end;
     end;
 
@@ -291,6 +312,88 @@ begin
   result:=s;
 end;
 
+procedure CalcF1;
+var
+  tp:Ptr;
+  c:char;
+begin
+  clearList(F1);
+
+  tp:=F;
+
+  while tp<>Nil do
+  begin
+    for c in tp.VP do
+      appendNode(tp.VT, [c], F1);
+
+    tp:=tp.Next;
+  end;
+end;
+
+procedure calcF2;
+var
+  c:char;
+  tp:Ptr;
+  LEFT:MGT;
+begin
+  if F1=nil then
+    calcF1;
+
+  clearList(F2);
+  tp:=F1;
+  while tp<> nil do
+  begin
+    LEFT:=tp.VT;
+    for c in LEFT do
+      if (tp.VP <= calcXplus(LEFT-[c], f1)) then
+        LEFT:=LEFT-[c];
+
+    appendNode(LEFT, tp.VP, F2);
+
+    tp:=tp.Next;
+  end;
+end;
+procedure calcF3;
+var
+  tp:PTR;
+begin
+  if F2=nil then
+    calcF2;
+
+  tp:=F2;
+
+  while tp<>nil do
+  begin
+    tp.Active:=false;
+
+    if tp.VP<=calcXplus(tp.VT,F2) then
+      tp.Active:=false //Not matter but good as a dummy =))
+    else
+    begin
+      appendNode(tp.VT, tp.VP,F3);
+      tp.Active:=true;
+    end;
+    tp:=tp.Next;
+  end;
+end;
+
+procedure TCSDL.CalcF1ButClick(Sender: TObject);
+begin
+  CalcF1;
+  F1Out.Text := getRelation(F1,true,'F1');
+end;
+procedure TCSDL.CalcF2ButClick(Sender: TObject);
+begin
+  calcF2;
+  F2Out.Text:=getRelation(F2,false,'F2');
+end;
+
+procedure TCSDL.CalcF3ButClick(Sender: TObject);
+begin
+  calcF3;
+  F3Out.Text:=getRelation(F3,true, 'F3=Fc');
+end;
+
 procedure TCSDL.CalcK1ButClick(Sender: TObject);
 begin
   K1OutPut.Text := MGT2STR(CalcK1(u))
@@ -339,7 +442,7 @@ begin
   UoutE.Text:=s;
   UinE.Text:=s;
 
-  clearList;
+  clearList(f);
 
   while not Eof(txt) do
   begin
