@@ -3,9 +3,9 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls,
-  Vcl.Mask;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.StrUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Vcl.ComCtrls, Vcl.Mask, System.Types;
 
 type
   TCSDL = class(TForm)
@@ -43,11 +43,18 @@ type
     K1: TLabel;
     CalcK1But: TButton;
     K1OutPut: TEdit;
+    ImportFromFile: TButton;
+    KSPan: TPanel;
+    Label2: TLabel;
+    CalcKS: TButton;
+    KS1OutE: TEdit;
     procedure UinEChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SubmitFClick(Sender: TObject);
     procedure CalcXplusButClick(Sender: TObject);
     procedure CalcK1ButClick(Sender: TObject);
+    procedure ImportFromFileClick(Sender: TObject);
+    procedure CalcKSClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -105,11 +112,11 @@ begin
   o:='F={';
   while (temp<>nil) do
     begin
-      o:=' ' + o+MGT2STR(temp.VT)+'->'+MGT2STR(temp.VP)+';';
+      o:=o+MGT2STR(temp.VT)+'→'+MGT2STR(temp.VP)+'; ';
       temp:=temp.Next;
     end;
 
-    o:=o+' }';
+    o:=o+'}';
     result:=o;
 end;
 procedure appendNode(left:MGT; right:MGT);
@@ -132,6 +139,20 @@ begin
       tail.Next:=tp;
       tail := tail.Next;
     end;
+end;
+
+procedure clearList();
+var
+tp:Ptr;
+begin
+  tp:=f;
+
+  while f<>nil do
+  begin
+    f:=f.Next;
+    FreeMemory(tp);
+    tp:=f;
+  end;
 end;
 
 procedure addRelation(left:string; right:string);
@@ -183,27 +204,62 @@ begin
   result:=KQ;
 end;
 
-function isKey(k:MGT):Boolean;
-var kq:MGT;
+function isSuperKey(k:MGT):Boolean;     //Sieu khoa
 begin
-  kq:=calcXplus(k);
-  exit(kq=u);
+  result:=calcXplus(k)=u;
+end;
+
+function isKey(k:MGT):Boolean; //Sieu khoa toi thieu
+var
+  c:char;
+begin
+
+  if not isSuperKey(k) then
+    exit(false);
+
+  for c in k do
+    if isSuperKey(k-[c]) then
+      exit(false);
+
+  result:=true;
 end;
 
 function calcK1(k:MGT):MGT;
 var
   c:char;
 begin
-  for c in k do
-    if isKey(k-[c]) then
-      exit(calcK1(k-[c]));
+  if isKey(k) then
+    exit(k)
+  else
+    for c in k do
+      if isSuperKey(k-[c]) then
+        exit(calcK1(k-[c]));
+  exit([]);
+end;
 
-  exit(k);
+function calcKS1(k:MGT; s:string=''):String;
+var 
+  c:char;
+begin
+  if not isSuperKey(k) then
+    exit(s);
+  if isKey(k) and not s.Contains(MGT2STR(k)) then
+    exit(s+MGT2STR(k)+'; ');
+
+  for c in k do
+    s:=calcKS1(k-[c],s);
+
+  result:=s;
 end;
 
 procedure TCSDL.CalcK1ButClick(Sender: TObject);
 begin
   K1OutPut.Text := MGT2STR(CalcK1(u))
+end;
+
+procedure TCSDL.CalcKSClick(Sender: TObject);
+begin
+  KS1OutE.Text:=calcKS1(u);
 end;
 
 procedure TCSDL.CalcXplusButClick(Sender: TObject);
@@ -214,6 +270,43 @@ end;
 procedure TCSDL.FormShow(Sender: TObject);
 begin
   mFRelations.Lines.Clear;
+end;
+
+procedure TCSDL.ImportFromFileClick(Sender: TObject);
+var
+  fileName:String;
+  txt:TextFile;
+  s:String;
+  rel: TStringDynArray;
+begin
+  mFRelations.Lines.Clear;
+  fileName:='input.txt';
+
+  if not FileExists(fileName) then
+  begin
+    mFRelations.Lines.Add('input.txt not found! Please put check x32/Debug');
+    exit();
+  end;
+
+  AssignFile(txt,fileName);
+  Reset(txt);
+  Readln(txt, s);
+  U:=STR2MGT(s);
+  UoutE.Text:=s;
+  UinE.Text:=s;
+
+  clearList;
+
+  while not Eof(txt) do
+  begin
+    ReadLn(txt, s);
+
+    rel := SplitString(s, ' ');
+    addRelation(rel[0], rel[1]);
+  end;
+
+  mFRelations.Lines.Add(getRelation(F));
+  CloseFile(txt);
 end;
 
 procedure TCSDL.SubmitFClick(Sender: TObject);

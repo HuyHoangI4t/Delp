@@ -141,7 +141,7 @@ object CSDL: TCSDL
       Top = 1
       Width = 813
       Height = 356
-      ActivePage = Key
+      ActivePage = Home
       Align = alClient
       MultiLine = True
       TabOrder = 0
@@ -240,6 +240,16 @@ object CSDL: TCSDL
             TabOrder = 2
             OnClick = SubmitFClick
           end
+          object ImportFromFile: TButton
+            Left = 1
+            Top = 137
+            Width = 274
+            Height = 40
+            Align = alTop
+            Caption = 'Nh'#7853'p t'#7915' File'
+            TabOrder = 3
+            OnClick = ImportFromFileClick
+          end
         end
         object XPlusPanel: TPanel
           Left = 279
@@ -307,7 +317,7 @@ object CSDL: TCSDL
           Height = 41
           Align = alTop
           TabOrder = 0
-          ExplicitTop = 8
+          ExplicitTop = 82
           object K1: TLabel
             Left = 1
             Top = 1
@@ -319,8 +329,8 @@ object CSDL: TCSDL
             ExplicitHeight = 19
           end
           object CalcK1But: TButton
-            Left = 77
-            Top = 8
+            Left = 103
+            Top = 10
             Width = 75
             Height = 25
             Caption = 'Calc'
@@ -330,7 +340,45 @@ object CSDL: TCSDL
           object K1OutPut: TEdit
             Left = 184
             Top = 8
-            Width = 121
+            Width = 569
+            Height = 27
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 1
+          end
+        end
+        object KSPan: TPanel
+          Left = 0
+          Top = 41
+          Width = 805
+          Height = 41
+          Align = alTop
+          TabOrder = 1
+          ExplicitLeft = -3
+          ExplicitTop = 64
+          object Label2: TLabel
+            Left = 1
+            Top = 1
+            Width = 81
+            Height = 39
+            Align = alLeft
+            Caption = 'T'#205'NH KS1: '
+            Layout = tlCenter
+            ExplicitHeight = 19
+          end
+          object CalcKS: TButton
+            Left = 103
+            Top = 6
+            Width = 75
+            Height = 25
+            Caption = 'Calc'
+            TabOrder = 0
+            OnClick = CalcKSClick
+          end
+          object KS1OutE: TEdit
+            Left = 184
+            Top = 6
+            Width = 569
             Height = 27
             TabStop = False
             ReadOnly = True
