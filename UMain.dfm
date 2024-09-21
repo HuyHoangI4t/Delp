@@ -141,7 +141,7 @@ object CSDL: TCSDL
       Top = 1
       Width = 813
       Height = 356
-      ActivePage = Home
+      ActivePage = Key
       Align = alClient
       MultiLine = True
       TabOrder = 0
@@ -317,16 +317,15 @@ object CSDL: TCSDL
           Height = 41
           Align = alTop
           TabOrder = 0
-          ExplicitTop = 82
           object K1: TLabel
             Left = 1
             Top = 1
-            Width = 68
+            Width = 81
             Height = 39
             Align = alLeft
+            AutoSize = False
             Caption = 'T'#205'NH K1:'
             Layout = tlCenter
-            ExplicitHeight = 19
           end
           object CalcK1But: TButton
             Left = 103
@@ -354,14 +353,13 @@ object CSDL: TCSDL
           Height = 41
           Align = alTop
           TabOrder = 1
-          ExplicitLeft = -3
-          ExplicitTop = 64
           object Label2: TLabel
             Left = 1
             Top = 1
             Width = 81
             Height = 39
             Align = alLeft
+            AutoSize = False
             Caption = 'T'#205'NH KS1: '
             Layout = tlCenter
             ExplicitHeight = 19
@@ -376,6 +374,44 @@ object CSDL: TCSDL
             OnClick = CalcKSClick
           end
           object KS1OutE: TEdit
+            Left = 184
+            Top = 6
+            Width = 569
+            Height = 27
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 1
+          end
+        end
+        object K2Pan: TPanel
+          Left = 0
+          Top = 82
+          Width = 805
+          Height = 41
+          Align = alTop
+          TabOrder = 2
+          ExplicitLeft = -3
+          ExplicitTop = 137
+          object Label3: TLabel
+            Left = 1
+            Top = 1
+            Width = 81
+            Height = 39
+            Align = alLeft
+            AutoSize = False
+            Caption = 'T'#205'NH K2:'
+            Layout = tlCenter
+          end
+          object CalcK2But: TButton
+            Left = 103
+            Top = 6
+            Width = 75
+            Height = 25
+            Caption = 'Calc'
+            TabOrder = 0
+            OnClick = CalcK2ButClick
+          end
+          object K2Output: TEdit
             Left = 184
             Top = 6
             Width = 569

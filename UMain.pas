@@ -48,6 +48,10 @@ type
     Label2: TLabel;
     CalcKS: TButton;
     KS1OutE: TEdit;
+    K2Pan: TPanel;
+    Label3: TLabel;
+    CalcK2But: TButton;
+    K2Output: TEdit;
     procedure UinEChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SubmitFClick(Sender: TObject);
@@ -55,6 +59,7 @@ type
     procedure CalcK1ButClick(Sender: TObject);
     procedure ImportFromFileClick(Sender: TObject);
     procedure CalcKSClick(Sender: TObject);
+    procedure CalcK2ButClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -237,6 +242,40 @@ begin
   exit([]);
 end;
 
+function calcK2():MGT;
+var
+  c:char;
+  H:MGT; //Hieu
+  G:MGT; //Giao (trung gian)
+  LEFT:MGT;
+  RIGHT:MGT;
+  temp:PTR;
+  K:MGT;
+begin
+  temp:=f;
+  LEFT := [];
+  RIGHT := [];
+  
+  while temp<>nil do
+  begin
+    LEFT := LEFT + temp.VT;
+    RIGHT := RIGHT + temp.VP;
+    
+    temp:=temp.Next;
+  end;
+
+  H:= U-RIGHT;
+  G:= LEFT*RIGHT;
+
+  K:=H+G;
+
+  for c in K do
+    if isSuperKey(K-[c]) then
+      K:=K-[c];
+
+  result:=K;
+end;
+
 function calcKS1(k:MGT; s:string=''):String;
 var 
   c:char;
@@ -255,6 +294,11 @@ end;
 procedure TCSDL.CalcK1ButClick(Sender: TObject);
 begin
   K1OutPut.Text := MGT2STR(CalcK1(u))
+end;
+
+procedure TCSDL.CalcK2ButClick(Sender: TObject);
+begin
+  K2Output.Text:=CalcK2;
 end;
 
 procedure TCSDL.CalcKSClick(Sender: TObject);
