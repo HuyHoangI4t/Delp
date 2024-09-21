@@ -148,6 +148,10 @@ object CSDL: TCSDL
       TabWidth = 75
       object Home: TTabSheet
         Caption = 'Home'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Splitter3: TSplitter
           Left = 276
           Top = 0
@@ -269,11 +273,10 @@ object CSDL: TCSDL
               Left = 1
               Top = 1
               Width = 69
-              Height = 39
+              Height = 19
               Align = alLeft
               Caption = 'T'#205'NH X+:'
               Layout = tlCenter
-              ExplicitHeight = 19
             end
             object XplusE: TMaskEdit
               Left = 87
@@ -390,8 +393,6 @@ object CSDL: TCSDL
           Height = 41
           Align = alTop
           TabOrder = 2
-          ExplicitLeft = -3
-          ExplicitTop = 137
           object Label3: TLabel
             Left = 1
             Top = 1

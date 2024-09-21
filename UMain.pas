@@ -298,7 +298,7 @@ end;
 
 procedure TCSDL.CalcK2ButClick(Sender: TObject);
 begin
-  K2Output.Text:=CalcK2;
+  K2Output.Text:=MGT2STR(CalcK2);
 end;
 
 procedure TCSDL.CalcKSClick(Sender: TObject);
